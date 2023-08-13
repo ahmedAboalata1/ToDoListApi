@@ -12,26 +12,41 @@ namespace ToDoListApi.Repository
             this.context=context;
         }
 
+        public void CreateTask(Task task)
+        {
+            context.Add(task);
+            context.SaveChanges();
+        }
+
         public void DeleteTask(int id)
         {
-            throw new NotImplementedException();
+            Task task = GetTaskById(id);
+            context.Task.Remove(task);
+            context.SaveChanges();
         }
 
         public Task GetTaskById(int id)
         {
-            throw new NotImplementedException();
+            Task task = context.Task.FirstOrDefault(x=>x.Id==id);     
+              return task;
         }
 
         public List<Task> GetTasks()
         {
-            throw new NotImplementedException();
+           List<Task> tasks = context.Task.ToList();
+            return tasks;
         }
 
-        public void UpdateTask(Task task)
+        public void UpdateTask(int id ,Task task)
         {
-            throw new NotImplementedException();
+            Task OldTask = GetTaskById(id);
+            if (OldTask != null)
+            {
+                OldTask.IsCompleted=task.IsCompleted;
+                OldTask.Desciption=task.Desciption;
+                OldTask.DueDate=task.DueDate;
+            }
+            context.SaveChanges();
         }
-
-        
     }
 }

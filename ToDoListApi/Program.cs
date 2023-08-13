@@ -1,6 +1,8 @@
 
+using FluentAssertions.Common;
 using Microsoft.EntityFrameworkCore;
 using ToDoListApi.Models;
+using ToDoListApi.Repository;
 
 namespace ToDoListApi
 {
@@ -17,6 +19,15 @@ namespace ToDoListApi
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<Context>(op => op.UseSqlServer(builder.Configuration.GetConnectionString("Task1")));
+            builder.Services.AddScoped<ITaskRepo, TaskRepo>();
+            builder.Services.AddScoped<Context, Context>();
+            builder.Services.AddCors(options => {
+                options.AddPolicy("Policy", policy => {
+                    policy.AllowAnyMethod();
+                    policy.AllowAnyOrigin();
+                    policy.AllowAnyHeader();
+                });
+            });
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -27,7 +38,7 @@ namespace ToDoListApi
             }
 
             app.UseHttpsRedirection();
-
+            app.UseCors("Policy");
             app.UseAuthorization();
 
 

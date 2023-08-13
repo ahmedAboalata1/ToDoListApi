@@ -6,5 +6,6 @@ public interface ITaskRepo
     List<Task> GetTasks();
     Task GetTaskById(int id);
     void DeleteTask(int id);
-    void UpdateTask(Task task);
+    void UpdateTask(int id ,Task task);
+    void CreateTask(Task task);  
 }
